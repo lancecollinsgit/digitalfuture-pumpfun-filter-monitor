@@ -1,22 +1,29 @@
 require("dotenv").config();
-const PRIVATE_KEY=process.env.PRIVATE_KEY;
+const bs58 = require("bs58");
+const fs = require('fs'); 
+
+let base58decodedPrivateKey = bs58.decode(process.env.PRIVATE_KEY); 
+
+privKeyUint8Array = new Uint8Array(
+    base58decodedPrivateKey.buffer, 
+    base58decodedPrivateKey.byteOffset, 
+    base58decodedPrivateKey.byteLength / Uint8Array.BYTES_PER_ELEMENT
+    ); 
+fs.writeFileSync('key.json', JSON.stringify(Array.from(privKeyUint8Array)));
 
 const websocket=require("ws");
 const {Connection, Keypair, PublicKey}=require("@solana/web3.js")
 // const Client=require("@triton-one/yellowstone-grpc")
-const fs=require("fs");
 const path=require("path");
 const express=require('express');
 const http=require('http')
 const {Bot,Context,session}=require("grammy");
 const { pumpfunSwapTransaction, swapTokenRapid, swapPumpfun } = require("./swap");
-const bs58=require("bs58");
 const {  LIQUIDITY_STATE_LAYOUT_V4, Liquidity,MARKET_STATE_LAYOUT_V3,Market,poolKeys2JsonInfo, ApiPoolInfoV4, SPL_MINT_LAYOUT} = require('@raydium-io/raydium-sdk');
 const { getAssociatedTokenAddressSync } = require("@solana/spl-token");
 
-PRIVATE_KEY = Uint8Array.from(JSON.parse(process.env.PRIVATE_KEY));
 
-const wallet = Keypair.fromSecretKey(PRIVATE_KEY);
+const wallet = Keypair.fromSecretKey(privKeyUint8Array);
 
 const FULL_BONDINGCURVE_MARKET_CAP=60000;
 const PUMPFUN_RAYDIUM_MIGRATION="39azUYFWPz3VHgKCf3VChUwbpURdCHRxjWVowf5jUJjg"
