@@ -14,7 +14,7 @@ const bs58=require("bs58");
 const {  LIQUIDITY_STATE_LAYOUT_V4, Liquidity,MARKET_STATE_LAYOUT_V3,Market,poolKeys2JsonInfo, ApiPoolInfoV4, SPL_MINT_LAYOUT} = require('@raydium-io/raydium-sdk');
 const { getAssociatedTokenAddressSync } = require("@solana/spl-token");
 
-const PRIVATE_KEY = Uint8Array.from(JSON.parse(process.env.PRIVATE_KEY));
+PRIVATE_KEY = Uint8Array.from(JSON.parse(process.env.PRIVATE_KEY));
 
 const wallet = Keypair.fromSecretKey(PRIVATE_KEY);
 
